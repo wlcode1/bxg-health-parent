@@ -21,6 +21,7 @@ public class Result implements Serializable{
         this.data = data;
     }
 
+
     public boolean isFlag() {
         return flag;
     }

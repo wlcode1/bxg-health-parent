@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class CheckGroup implements Serializable {
     /**
-     * 实施
+     * 实施dev
      */
     private Integer id;//主键
     private String code;//编码

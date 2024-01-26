@@ -5,7 +5,7 @@ health:
     port: 3306
     database: itcast_health
     username: root
-    password: root
+    password: 654321
 #阿里云oss配置
   alioss:
     endpoint: your endpoint address 例如 oss-cn-beijing.aliyuncs.com

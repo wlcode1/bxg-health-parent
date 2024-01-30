@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.mapper.CheckSetmealWithGroupsMapper">
+
+    <insert id="insertCheckGroups">
+        insert into t_setmeal_checkgroup (setmeal_id, checkgroup_id) values
+        <foreach collection="groups" item="group" separator=",">
+            (#{group.setmealId}, #{group.checkgroupId})
+        </foreach>
+    </insert>
+
+    <delete id="deleteBySetmealGroupId">
+        delete
+        from t_setmeal_checkgroup
+        where setmeal_id = #{setmealId}
+    </delete>
+
+    <select id="selectBysetmealId" resultType="com.itheima.pojo.SetmealWithGroups">
+        select *
+        from t_setmeal_checkgroup
+        where setmeal_id = #{id}
+    </select>
+
+    <select id="selectByGroupId" resultType="com.itheima.pojo.SetmealWithGroups">
+        select *
+        from t_setmeal_checkgroup
+        where checkgroup_id = #{groupId}
+    </select>
+
+</mapper>

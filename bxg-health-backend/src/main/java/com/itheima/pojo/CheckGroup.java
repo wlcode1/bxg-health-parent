@@ -17,13 +17,13 @@ public class CheckGroup implements Serializable {
     private String sex;//适用性别
     private String remark;//介绍
     private String attention;//注意事项
-    private List<CheckItem> checkItems;//一个检查组合包含多个检查项
+    private List<Long> checkItems;//一个检查组合包含多个检查项
 
-    public List<CheckItem> getCheckItems() {
+    public List<Long> getCheckItems() {
         return checkItems;
     }
 
-    public void setCheckItems(List<CheckItem> checkItems) {
+    public void setCheckItems(List<Long> checkItems) {
         this.checkItems = checkItems;
     }
 

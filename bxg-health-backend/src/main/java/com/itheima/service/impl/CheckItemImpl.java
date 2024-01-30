@@ -3,17 +3,24 @@ package com.itheima.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.itheima.common.entity.PageResult;
+import com.itheima.mapper.CheckGroupWithItemMapper;
 import com.itheima.mapper.CheckItemMapper;
 import com.itheima.pojo.CheckItem;
 import com.itheima.pojo.FindPage;
+import com.itheima.pojo.GroupWithItem;
 import com.itheima.service.CheckItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CheckItemImpl implements CheckItemService {
     @Autowired
     CheckItemMapper checkItemMapper;
+
+    @Autowired
+    CheckGroupWithItemMapper checkGroupWithItemMapper;
 
     /**
      * 添加检查项
@@ -32,7 +39,14 @@ public class CheckItemImpl implements CheckItemService {
      */
     @Override
     public void deleteCheckItem(Long id) {
-        checkItemMapper.deleteCheckItem(id);
+        //查看是否被检查组关联，如果被检查组关联不能删除
+        List<GroupWithItem> groupWithItemList = checkGroupWithItemMapper.selectByItemId(id);
+        //如果数组为空或者数组中的元素为0那么就可以删除
+        if (groupWithItemList == null || groupWithItemList.size() == 0) {
+            checkItemMapper.deleteCheckItem(id);
+        } else {
+            System.out.println("检查项被检查组关联，不能删除！");
+        }
     }
 
     /**

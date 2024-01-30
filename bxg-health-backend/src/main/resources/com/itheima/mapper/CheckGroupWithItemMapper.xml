@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.mapper.CheckGroupWithItemMapper">
+
+    <insert id="insertCheckItems">
+        insert into t_checkgroup_checkitem (checkgroup_id, checkitem_id) values
+        <foreach collection="groupWithItemList" item="gi" separator=",">
+            (#{gi.checkgroupId}, #{gi.checkitemId})
+        </foreach>
+    </insert>
+
+    <select id="selectByGroupId" resultType="com.itheima.pojo.GroupWithItem">
+        select *
+        from t_checkgroup_checkitem
+        where checkgroup_id = #{groupId};
+    </select>
+
+    <delete id="deleteByGroupItemId">
+        delete
+        from t_checkgroup_checkitem
+        where checkgroup_id = #{groupId}
+    </delete>
+
+    <select id="selectByItemId" resultType="com.itheima.pojo.GroupWithItem">
+        select *
+        from t_checkgroup_checkitem
+        where checkitem_id = #{itemId}
+    </select>
+
+</mapper>

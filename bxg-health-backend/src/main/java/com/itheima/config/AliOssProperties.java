@@ -8,10 +8,8 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "health.alioss")
 public class AliOssProperties {
-
     private String endpoint;
     private String accessKeyId;
     private String accessKeySecret;
     private String bucketName;
-
 }

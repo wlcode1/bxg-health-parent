@@ -39,14 +39,14 @@ public class AliOssUtil {
             log.error("Caught an OSSException, which means your request made it to OSS, "
                     + "but was rejected with an error response for some reason.");
             log.error("Error Message:{}", oe.getErrorMessage());
-            log.error("Error Code:{}",oe.getErrorCode());
-            log.error("Request ID:{}",oe.getRequestId());
+            log.error("Error Code:{}", oe.getErrorCode());
+            log.error("Request ID:{}", oe.getRequestId());
             log.error("Host ID:{}", oe.getHostId());
         } catch (ClientException ce) {
             log.error("Caught an ClientException, which means the client encountered "
                     + "a serious internal problem while trying to communicate with OSS, "
                     + "such as not being able to access the network.");
-            log.error("Error Message:{}",ce.getMessage());
+            log.error("Error Message:{}", ce.getMessage());
         } finally {
             if (ossClient != null) {
                 ossClient.shutdown();
@@ -68,7 +68,7 @@ public class AliOssUtil {
     }
 
     public void delete(String objectName) {
-        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId,accessKeySecret);
+        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
 
         try {
             // 删除文件或目录。如果要删除目录，目录必须为空。

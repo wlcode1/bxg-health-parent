@@ -26,7 +26,6 @@ public class CheckItemController {
         return new Result(true, null);
     }
 
-
     /**
      * 删除检查项
      *

@@ -5,7 +5,6 @@ import com.itheima.pojo.CheckItem;
 import com.itheima.pojo.FindPage;
 
 public interface CheckItemService {
-
     /**
      * 添加检查项
      *

@@ -6,17 +6,17 @@ health:
     database: itcast_health
     username: root
     password: 654321
-#阿里云oss配置
+  #阿里云oss配置
   alioss:
-    endpoint: your endpoint address 例如 oss-cn-beijing.aliyuncs.com
-    access-key-id: your access key
-    access-key-secret: your access secret
-    bucket-name: your bucket name
-# redis配置
+    endpoint: oss-cn-hangzhou.aliyuncs.com
+    access-key-id: LTAI5t69jEzoLn8avUBodKTp
+    access-key-secret: wb5fkPd3JNAdK5uPgKnAWJbS241krD
+    bucket-name: web-25
+  # redis配置
   redis:
     host: localhost
     port: 6379
-#    password: 123456
+    #    password: 123456
     database: 10
 #spring:
 #  freemarker:

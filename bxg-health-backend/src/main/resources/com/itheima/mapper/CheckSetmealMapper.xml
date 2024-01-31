@@ -8,12 +8,6 @@
         values (#{code}, #{name}, #{sex}, #{age}, #{price}, #{helpCode}, #{attention}, #{remark}, #{img})
     </insert>
 
-    <delete id="deleteCheckSetmeal">
-        delete
-        from t_setmeal
-        where id = #{id}
-    </delete>
-
     <update id="upDateCheckSetmeal">
         update t_setmeal
         <set>
@@ -33,6 +27,12 @@
     <select id="pageQuery" resultType="com.itheima.pojo.Setmeal">
         select *
         from t_setmeal
+    </select>
+
+    <select id="findById" resultType="com.itheima.pojo.Setmeal">
+        select *
+        from t_setmeal
+        where id = #{id}
     </select>
 
 </mapper>

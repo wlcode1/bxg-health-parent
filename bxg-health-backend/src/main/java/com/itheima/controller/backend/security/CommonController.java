@@ -19,18 +19,18 @@ public class CommonController {
     private AliOssUtil aliOssUtil;
 
     @PostMapping("/upload")
-    public Result upload(MultipartFile file) {
-        log.info("文件上传：{}", file);
+    public Result upload(MultipartFile imgFile) {
+        log.info("文件上传：{}", imgFile);
         try {
             //原始文件名
-            String originalFileName = file.getOriginalFilename();
+            String originalFileName = imgFile.getOriginalFilename();
             //截取原始文件名的后缀 .png
             String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
             //构造新文件名称
             String objectName = UUID.randomUUID().toString() + extension;
 
             //文件的请求路径
-            String filePath = aliOssUtil.upload(file.getBytes(), objectName);
+            String filePath = aliOssUtil.upload(imgFile.getBytes(), objectName);
             return new Result(true, "图片上传成功", filePath);
         } catch (Exception e) {
             log.info("文件上传失败：{}", e);

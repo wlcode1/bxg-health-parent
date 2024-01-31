@@ -72,4 +72,32 @@ public class CheckItemImpl implements CheckItemService {
         Page<CheckItem> page = checkItemMapper.pageQuery(findPage);
         return new PageResult(page.getTotal(), page.getResult());
     }
+
+    @Override
+    public List<CheckItem> findAll() {
+        List<CheckItem> checkItemList = checkItemMapper.findAll();
+        return checkItemList;
+    }
+
+    /**
+     * 根据检查组id查询相关联的检查项id
+     *
+     * @param checkgroupId
+     * @return
+     */
+    @Override
+    public List<Long> findCheckItemIdsByCheckGroupId(Long checkgroupId) {
+        return checkItemMapper.findCheckItemIdsByCheckGroupId(checkgroupId);
+    }
+
+    /**
+     * 根据id查询检查项
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public CheckItem findById(Long id) {
+        return checkItemMapper.findById(id);
+    }
 }

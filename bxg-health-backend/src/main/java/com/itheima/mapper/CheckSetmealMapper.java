@@ -16,13 +16,6 @@ public interface CheckSetmealMapper {
     void addCheckSetmeal(Setmeal setmeal);
 
     /**
-     * 删除套餐
-     *
-     * @param id
-     */
-    void deleteCheckSetmeal(Long id);
-
-    /**
      * 编辑套餐
      *
      * @param setmeal
@@ -36,4 +29,12 @@ public interface CheckSetmealMapper {
      * @return
      */
     Page<Setmeal> pageQuery(FindPage findPage);
+
+    /**
+     * 根据套餐id查询套餐
+     *
+     * @param id
+     * @return
+     */
+    Setmeal findById(Long id);
 }

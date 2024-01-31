@@ -33,4 +33,21 @@
         from t_checkitem
     </select>
 
+    <select id="findAll" resultType="com.itheima.pojo.CheckItem">
+        select *
+        from t_checkitem
+    </select>
+
+    <select id="findCheckItemIdsByCheckGroupId" resultType="java.lang.Long">
+        select t_checkgroup_checkitem.checkitem_id
+        from t_checkgroup_checkitem
+        where checkgroup_id = #{checkgroupId}
+    </select>
+
+    <select id="findById" resultType="com.itheima.pojo.CheckItem">
+        select *
+        from t_checkitem
+        where id = #{id}
+    </select>
+
 </mapper>

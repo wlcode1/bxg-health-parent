@@ -28,60 +28,63 @@ public class CheckSetmealImpl implements CheckSetmealService {
      * 添加检查套餐
      *
      * @param setmeal
+     * @param groupIds
      */
     @Transactional
     @Override
-    public void addCheckSetmeal(Setmeal setmeal) {
+    public void addCheckSetmeal(Setmeal setmeal, List<Long> groupIds) {
         //首先插入套餐
         checkSetmealMapper.addCheckSetmeal(setmeal);
-        //取出传入的套餐中包含的检查组的id
-        List<Long> setmealGroupIds = setmeal.getCheckGroups();
-        if (setmealGroupIds != null && setmealGroupIds.size() > 0) {
+        //查看groupIds是否有值
+        if (groupIds != null && groupIds.size() > 0) {
             //然后拿到套餐的id
             Integer setmealId = setmeal.getId();
             //传入到添加套餐组的方法中
-            addSetmealGroups(setmealId, setmealGroupIds);
+            addSetmealGroups(setmealId, groupIds);
         }
     }
 
     /**
-     * 添加套餐组
-     *
-     * @param setmealId
-     * @param setmealGroupIds
-     */
-    public void addSetmealGroups(Integer setmealId, List<Long> setmealGroupIds) {
-        //新建一个list，其中将要存入的是套餐与检查组的id的model
-        List<SetmealWithGroups> setmealGroupsList = new ArrayList<>();
-        //遍历检查组的id的数组
-        for (Long sgId : setmealGroupIds) {
-            //新建套餐和检查组id的model
-            SetmealWithGroups setmealGroups = SetmealWithGroups.builder().setmealId(setmealId).checkgroupId(sgId.intValue()).build();
-            //添加到上面的新的数组中
-            System.out.println(setmealGroups);
-            setmealGroupsList.add(setmealGroups);
-        }
-        //插入
-        checkSetmealWithGroupsMapper.insertCheckGroups(setmealGroupsList);
-    }
-
-    /**
-     * 删除检查套餐
+     * 根据套餐id查询套餐
      *
      * @param id
+     * @return
      */
     @Override
+    public Setmeal findById(Long id) {
+        return checkSetmealMapper.findById(id);
+    }
+
+    /**
+     * 修改检查套餐
+     *
+     * @param setmeal
+     * @param groupIds
+     */
     @Transactional
-    public void deleteCheckSetmeal(Long id) {
-        //先删除套餐组表中的相关数据
-        List<SetmealWithGroups> setmealGroupsList = checkSetmealWithGroupsMapper.selectBysetmealId(id);
-        if (setmealGroupsList.size() > 0) {
-            for (int i = 0; i < setmealGroupsList.size(); i++) {
-                checkSetmealWithGroupsMapper.deleteBySetmealGroupId(id);
-            }
+    @Override
+    public void editCheckSetmeal(Setmeal setmeal, List<Long> groupIds) {
+        //先删除套餐和检查组表中的相关数据
+        deleteSetmealGroups(setmeal.getId().longValue());
+        //再更新套餐的数据
+        checkSetmealMapper.upDateCheckSetmeal(setmeal);
+        //最后再把套餐和检查组数据添加进去
+        if (groupIds != null && groupIds.size() > 0) {
+            addSetmealGroups(setmeal.getId(), groupIds);
         }
-        //然后再删除套餐的数据
-        checkSetmealMapper.deleteCheckSetmeal(id);
+    }
+
+    /**
+     * 分页查询套餐
+     *
+     * @param findPage
+     * @return
+     */
+    @Override
+    public PageResult pageQuery(FindPage findPage) {
+        PageHelper.startPage(findPage.getCurrentPage(), findPage.getPageSize());
+        Page<Setmeal> page = checkSetmealMapper.pageQuery(findPage);
+        return new PageResult(page.getTotal(), page.getResult());
     }
 
     /**
@@ -99,33 +102,22 @@ public class CheckSetmealImpl implements CheckSetmealService {
     }
 
     /**
-     * 修改检查套餐
+     * 添加套餐组
      *
-     * @param setmeal
+     * @param setmealId
+     * @param groupIds
      */
-    @Transactional
-    @Override
-    public void editCheckSetmeal(Setmeal setmeal) {
-        //先删除套餐组表中的相关数据
-        deleteSetmealGroups(setmeal.getId().longValue());
-        //再更新套餐的数据
-        checkSetmealMapper.upDateCheckSetmeal(setmeal);
-        //最后再把套餐组数据添加进去
-        if (setmeal.getCheckGroups() != null && setmeal.getCheckGroups().size() > 0) {
-            addSetmealGroups(setmeal.getId(), setmeal.getCheckGroups());
+    public void addSetmealGroups(Integer setmealId, List<Long> groupIds) {
+        //新建一个list，其中将要存入的是套餐与检查组的id的model
+        List<SetmealWithGroups> setmealGroupsList = new ArrayList<>();
+        //遍历检查组的id的数组
+        for (Long gId : groupIds) {
+            //新建套餐和检查组id的model
+            SetmealWithGroups setmealGroups = SetmealWithGroups.builder().setmealId(setmealId).checkgroupId(gId.intValue()).build();
+            //添加到上面的新的数组中
+            setmealGroupsList.add(setmealGroups);
         }
-    }
-
-    /**
-     * 分页查询套餐
-     *
-     * @param findPage
-     * @return
-     */
-    @Override
-    public PageResult pageQuery(FindPage findPage) {
-        PageHelper.startPage(findPage.getCurrentPage(), findPage.getPageSize());
-        Page<Setmeal> page = checkSetmealMapper.pageQuery(findPage);
-        return new PageResult(page.getTotal(), page.getResult());
+        //插入
+        checkSetmealWithGroupsMapper.insertCheckGroups(setmealGroupsList);
     }
 }

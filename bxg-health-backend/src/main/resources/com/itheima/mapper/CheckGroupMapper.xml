@@ -31,4 +31,21 @@
         from t_checkgroup
     </select>
 
+    <select id="findCheckGroupIdsBySetmealId" resultType="java.lang.Long">
+        select t_setmeal_checkgroup.checkgroup_id
+        from t_setmeal_checkgroup
+        where setmeal_id = #{setmealId};
+    </select>
+
+    <select id="findById" resultType="com.itheima.pojo.CheckGroup">
+        select *
+        from t_checkgroup
+        where id = #{id}
+    </select>
+
+    <select id="findAll" resultType="com.itheima.pojo.CheckGroup">
+        select *
+        from t_checkgroup
+    </select>
+
 </mapper>

@@ -4,6 +4,8 @@ import com.itheima.common.entity.PageResult;
 import com.itheima.pojo.CheckItem;
 import com.itheima.pojo.FindPage;
 
+import java.util.List;
+
 public interface CheckItemService {
     /**
      * 添加检查项
@@ -34,4 +36,24 @@ public interface CheckItemService {
      * @return
      */
     PageResult pageQuery(FindPage findPage);
+
+    /**
+     * 查询所有检查项
+     * @return
+     */
+    List<CheckItem> findAll();
+
+    /**
+     * 根据检查组id查询相关联的检查项id
+     * @param checkgroupId
+     * @return
+     */
+    List<Long> findCheckItemIdsByCheckGroupId(Long checkgroupId);
+
+    /**
+     * 根据id查询检查项
+     * @param id
+     * @return
+     */
+    CheckItem findById(Long id);
 }

@@ -7,7 +7,7 @@ spring:
   redis:
     host: ${health.redis.host}
     port: ${health.redis.port}
-    #    password: ${health.redis.password}
+    password: ${health.redis.password}
     database: ${health.redis.database}
   main:
     allow-circular-references: true

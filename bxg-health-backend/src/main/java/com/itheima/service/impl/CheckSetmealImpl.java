@@ -2,6 +2,7 @@ package com.itheima.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.itheima.common.constant.RedisConstant;
 import com.itheima.common.entity.PageResult;
 import com.itheima.mapper.CheckSetmealMapper;
 import com.itheima.mapper.CheckSetmealWithGroupsMapper;
@@ -10,6 +11,7 @@ import com.itheima.pojo.Setmeal;
 import com.itheima.pojo.SetmealWithGroups;
 import com.itheima.service.CheckSetmealService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,9 @@ public class CheckSetmealImpl implements CheckSetmealService {
     @Autowired
     CheckSetmealWithGroupsMapper checkSetmealWithGroupsMapper;
 
+    @Autowired
+    RedisTemplate redisTemplate;
+
     /**
      * 添加检查套餐
      *
@@ -35,6 +40,8 @@ public class CheckSetmealImpl implements CheckSetmealService {
     public void addCheckSetmeal(Setmeal setmeal, List<Long> groupIds) {
         //首先插入套餐
         checkSetmealMapper.addCheckSetmeal(setmeal);
+        //在此处存入已经插入到数据库中的图片
+        addLocalData(setmeal.getImg(), null);
         //查看groupIds是否有值
         if (groupIds != null && groupIds.size() > 0) {
             //然后拿到套餐的id
@@ -66,6 +73,14 @@ public class CheckSetmealImpl implements CheckSetmealService {
     public void editCheckSetmeal(Setmeal setmeal, List<Long> groupIds) {
         //先删除套餐和检查组表中的相关数据
         deleteSetmealGroups(setmeal.getId().longValue());
+
+        //此时形参中传入的image是新的所以需要去数据库中查找到旧的图片的地址，然后再截取后获取图片的名称
+        Setmeal tempSetmeal = findById(setmeal.getId().longValue());
+        //如果相比较后不同就需要进行更新redis中的数据
+        if (!tempSetmeal.getImg().equals(setmeal.getImg())) {
+            addLocalData(setmeal.getImg(), tempSetmeal.getImg());
+        }
+
         //再更新套餐的数据
         checkSetmealMapper.upDateCheckSetmeal(setmeal);
         //最后再把套餐和检查组数据添加进去
@@ -119,5 +134,24 @@ public class CheckSetmealImpl implements CheckSetmealService {
         }
         //插入
         checkSetmealWithGroupsMapper.insertCheckGroups(setmealGroupsList);
+    }
+
+    /**
+     * 向redis中插入图片名称数据
+     *
+     * @param newDataName
+     * @param oldDataName
+     */
+    public void addLocalData(String newDataName, String oldDataName) {
+        //新的要截取的名称数组
+        String[] newNameList = newDataName.split("/");
+        //如果旧的有值就进入
+        if (oldDataName != null && oldDataName.length() > 0) {
+            String[] oldNameList = oldDataName.split("/");
+            //删除旧的数据
+            redisTemplate.opsForSet().remove(RedisConstant.SETMEAL_PIC_DB_RESOURCES, oldNameList[3]);
+        }
+        //添加新的数据
+        redisTemplate.opsForSet().add(RedisConstant.SETMEAL_PIC_DB_RESOURCES, newNameList[3]);
     }
 }
